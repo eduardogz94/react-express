@@ -1,1 +1,1 @@
-import { fetching } from './Fetch'
+const http = new Http()

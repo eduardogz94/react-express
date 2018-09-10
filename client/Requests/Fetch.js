@@ -1,57 +1,25 @@
-export const request =  (method, endpoint, params = {}, headers = 'json') => {
-    return new Promise((res,rej) => {
-        var body
+class Http {
 
-        headers == 'json' 
-            ? (headers = 'application/json', body = JSON.stringify(params)) 
-            : headers
-        
-        headers == 'formdata' 
-            ? (headers = 'multipart/form-data', body = params)
-            : headers
+    call = (endpoint, fetchOptions, res, rej) => {
+        fetch(endpoint, fetchOptions)   
+        .then(response => response.json())
+        .then(response => res(response))
+        .catch(err => rej(err.message) )
+    }
 
-        var fetchOptions = {
-            method,
-            body,
-            credentials: 'include',
-            headers: {
-                'Content-type': headers
+    request =  (endpoint, method = 'GET', params = {}, headers = 'formdata') => {
+        return new Promise((res,rej) => {
+
+            var fetchOptions = {
+                credentials: 'include'
             }
-        };
-
-        switch (method) {
-            case 'GET':
-                fetch(endpoint,{
-                    credentials: 'include',
-                })
-                    .then(response => response.json())
-                    .then(response => res(response))
-                    .catch(err => rej(err.message) )
-            break;
-
-            case 'POST':
-
-                fetch(endpoint, fetchOptions)
-                    .then(response => response.json())
-                    .then(response => res(response) )
-                    .catch(err => rej(err.message) )
-            break;
-
-            case 'DELETE':
-
-                fetch(endpoint, fetchOptions)
-                    .then(response => response.json())
-                    .then(response => res(response) )
-                    .catch(err => rej(err.message) )
-            break;
-
-            case 'UPDATE':
-
-                fetch(endpoint, fetchOptions)
-                    .then(response => response.json())
-                    .then(response => res(response) )
-                    .catch(err => rej(err.message) )
-            break;
-        }
-    })
+            
+            method != 'GET' ? fetchOptions['method'] = method : method
+            headers == 'json' ? (fetchOptions['headers'] = {'Content-Type':'application/json'}, fetchOptions['body'] = JSON.stringify(params)) : fetchOptions['body'] = params
+    
+            this.call(endpoint, fetchOptions, res, rej)           
+        })
+    }
 }
+
+export default Http
