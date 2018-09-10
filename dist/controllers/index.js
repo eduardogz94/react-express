@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import session from './session'
 let router = express.Router();
 
-router.use('/', require('./session'));
+router.use('/', session);
 
 module.exports = router;

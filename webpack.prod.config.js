@@ -1,13 +1,20 @@
-import webpack from 'webpack';
+import webpack from'webpack';
 import path from 'path';
 
 module.exports = {
+    mode: 'production',
     entry: './client/index.js',
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'bundle.js',
         publicPath: '/static/'
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
+        }),
+        new webpack.optimize.UglifyJsPlugin()
+    ],  
     module: {
         loaders: [{
                 test: /\.(js|jsx)$/,
@@ -39,6 +46,6 @@ module.exports = {
 
     devServer: {
         hot: true,
-        contentBase:''
+        contentBase: './client'
     }
 };

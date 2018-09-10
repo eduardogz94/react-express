@@ -1,13 +1,19 @@
-const express = require('express');
-const app = express();
-const webpack = require('webpack');
-const path = require('path');
-const session = require('express-session');
-const passport = require('passport');
-const morgan = require('morgan');
-const webpack_config = require('../webpack.dev.config.js')
+import 'babel-polyfill';
+import express from 'express'
+import session from 'express-session';
+import passport from 'passport';
+import morgan from 'morgan';
+import config from './db/config';
+import Strategies from './helpers/localStrategy';
+import Controllers from './controllers/index';
+import webpack from 'webpack'
+import webpack_config from '../webpack.dev.config.js'
+import webpack_dev_middleware from'webpack-dev-middleware'
+import webpack_hot_middleware from'webpack-hot-middleware'
+import path from 'path';
+
 const compiler = webpack(webpack_config)
-const port = process.env.PORT || 4000;
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -19,12 +25,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(require('webpack-dev-middleware')(compiler, {
+app.use(webpack_dev_middleware(compiler, {
   noInfo: true,
   publicPath: webpack_config.output.publicPath
 }));
 
-app.use(require('webpack-hot-middleware')(compiler));
+app.use(webpack_hot_middleware(compiler));
 
 app.use(session({
   secret:'keyboardcat',
@@ -35,19 +41,20 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(morgan('combined'));
-
-app.use('/',require('./controllers/'));
+app.use('/', Controllers);
 
 app.get('*', (_, res) => {
    res.sendFile(path.join(__dirname, 'index.html'));
  });
 
- passport.serializeUser((user, done) => {
-   done(null, user);
-  });
-  
-  passport.deserializeUser((user, done) => {
-    done(null, user);
-  });
-  passport.use(require('./helpers/localStrategy'));
- app.listen(port);
+passport.serializeUser((user, done) => {
+ done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.use(Strategies);
+
+app.listen(config.port, () => console.log(`App listening on port # ${config.port}`));

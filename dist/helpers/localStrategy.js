@@ -1,12 +1,13 @@
-let user = require('./user_db');
-let passport = require('passport');
-let localStrategy = require('passport-local').Strategy;
+import user from './user_db';
+import passportLocal from 'passport-local';
 
-module.exports = new localStrategy({
+const LocalStrategy = passportLocal.Strategy;
+
+export default new LocalStrategy({
   usernameField: 'email',
-  passwordField: 'email',
+  passwordField: 'password',
 }, (username, password, done) => {
-    user.find_by_email(username).then((user_info)=>{
+    user.getUserByEmail(username).then((user_info)=>{
         if (user_info.error) {
             return done(null, false, {message: "email not found"});
         }

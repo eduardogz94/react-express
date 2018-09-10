@@ -1,10 +1,10 @@
-const express = require('express');
-const passport = require('passport');
-const auth = require('./../middlewares/isAuth')
-const user = require('./../helpers/user_db');
+import express from 'express';
+import passport from 'passport';
+import { newUser } from './../helpers/user_db';
+import { isAuth, isLogged } from './../middlewares/isAuth'
 const router = express.Router();
 
-router.post('/login',auth.isLogged,  (req, res, next) => {
+router.post('/login', isLogged,  (req, res, next) => {
     passport.authenticate('local',(err, user, info) => {
         if (err) {
             res.send({status:500})
@@ -20,7 +20,7 @@ router.post('/login',auth.isLogged,  (req, res, next) => {
     })(req, res, next)
 })
 
-router.post('/signup',auth.isLogged, (req, res, next) => {
+router.post('/signup', isLogged, (req, res, next) => {
     const { /* PARAMS HERE*/ } = req.body
     user.new(/* PARAMS HERE*/).then((data) => {
         console.log(data);
@@ -44,11 +44,11 @@ router.post('/signup',auth.isLogged, (req, res, next) => {
     })
 })
 
-router.get('/value',auth.isAuth ,(req,res) => {
+router.get('/value', isAuth ,(req,res) => {
     res.send({session:req.session.passport, status:200})
 });
 
-router.get('/logout',auth.isAuth ,(req, res) => {
+router.get('/logout', isAuth ,(req, res) => {
     req.logout();
     res.status(200).send({
         msg: 'Bye!'
