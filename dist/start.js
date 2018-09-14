@@ -1,5 +1,5 @@
 require('babel-register')({
-    presets: ['env']
+    presets: ['env', 'react', 'es2015']
 })
 
 // Import the rest of our application.
