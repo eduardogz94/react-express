@@ -1,4 +1,4 @@
-import user from './user_db';
+import user from '../models/user_model';
 import passportLocal from 'passport-local';
 
 const LocalStrategy = passportLocal.Strategy;

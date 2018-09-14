@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
-import { newUser } from './../helpers/user_db';
-import { isAuth, isLogged } from './../middlewares/isAuth'
+import { newUser } from '../models/user_model';
+import { isAuth, isLogged } from '../middlewares/isAuth'
 const router = express.Router();
 
 router.post('/login', isLogged,  (req, res, next) => {
@@ -55,4 +55,4 @@ router.get('/logout', isAuth ,(req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

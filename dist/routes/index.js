@@ -1,7 +1,7 @@
 import express from 'express';
-import session from './session'
+import session from '../controllers/session'
 let router = express.Router();
 
 router.use('/', session);
 
-module.exports = router;
+export default router;

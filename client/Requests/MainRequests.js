@@ -1,1 +1,1 @@
-const http = new Http()
+import http from './Fetch'

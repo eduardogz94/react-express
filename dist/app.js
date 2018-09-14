@@ -3,9 +3,9 @@ import express from 'express'
 import session from 'express-session';
 import passport from 'passport';
 import morgan from 'morgan';
-import config from './db/config';
+import config from './helpers/config';
 import Strategies from './helpers/localStrategy';
-import Controllers from './controllers/index';
+import Controllers from './routes/index';
 import webpack from 'webpack'
 import webpack_config from '../webpack.dev.config.js'
 import webpack_dev_middleware from'webpack-dev-middleware'

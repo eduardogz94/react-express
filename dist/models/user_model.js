@@ -1,4 +1,4 @@
-import db from '../db/db';
+import db from '../database/db';
 
 export const newUser = (/* params here */) => {
     return new Promise((res, rej) => {
